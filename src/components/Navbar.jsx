@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { client } from "../sanityClient";
+import { client } from "../sanityClient.js";
 import Logo from "../assets/warvena-logo.svg";
 
 export default function Navbar() {

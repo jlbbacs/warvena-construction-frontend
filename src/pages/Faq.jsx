@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { client } from '../sanityClient'
+import client from '../sanityClient.js';
 
 const HERO_IMAGE = 'https://cdn.sanity.io/images/pykxlxp8/production/175e934b0e0a408eef794e29449d0848135c3fb0-1800x1201.jpg'
 

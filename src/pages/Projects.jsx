@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { client } from '../sanityClient.js'
+import { client } from '../../sanityclient'
 import { Link } from 'react-router-dom'
 
 export default function Projects() {

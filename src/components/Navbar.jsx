@@ -22,15 +22,15 @@ export default function Navbar() {
     client
       .fetch(
         `
-      *[_type == "menu" && slug.current == "main-menu"][0]{
-        navigation_items[]{
-          _key,
-          page_label,
-          "pageTitle": page->title,
-          "pageSlug": page->slug.current
+        *[_type == "menu" && slug.current == "main-menu"][0]{
+          navigation_items[]{
+            _key,
+            page_label,
+            "pageTitle": page->title,
+            "pageSlug": page->slug.current
+          }
         }
-      }
-    `,
+      `,
       )
       .then((data) => {
         if (data?.navigation_items) setNavItems(data.navigation_items);
@@ -38,68 +38,60 @@ export default function Navbar() {
   }, []);
 
   const isTransparent = isHome && !scrolled;
-
-  // Get label - use page_label if exists, otherwise pageTitle
   const getLabel = (item) => item.page_label || item.pageTitle;
-
-  // Get path from slug
-  const getPath = (slug) => {
-    if (slug === "/") return "/";
-    return `/${slug}`;
-  };
+  const getPath = (slug) => (slug === "/" ? "/" : `/${slug}`);
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-6 transition-all duration-300
+      className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center transition-all duration-300
   ${
     isTransparent
-      ? "bg-transparent text-white"
-      : "bg-white text-gray-900 shadow-[0_1px_0_rgba(0,0,0,0.1)]"
+      ? "py-6 lg:py-12 bg-transparent text-white"
+      : "py-4 lg:py-6 bg-white text-gray-900 shadow-[0_1px_0_rgba(0,0,0,0.1)]"
   }`}
       style={{
         paddingLeft: "clamp(2rem, 8vw, 8rem)",
         paddingRight: "clamp(2rem, 8vw, 8rem)",
       }}
     >
-      {/* SVG Logo */}
-      <Link to="/" className="flex items-center" style={{ color: "inherit"}}>
-        <img src={Logo} alt="Warvena Construction" className="h-10 w-auto" />
+      {/* Logo */}
+      <Link to="/" className="flex items-center" style={{ color: "inherit" }}>
+        <img
+          src={Logo}
+          alt="Warvena Construction"
+          className="h-9.5 w-auto"
+          style={{
+            filter: isTransparent ? "none" : "invert(1)",
+          }}
+        />
       </Link>
 
-      {/* Hamburger */}
+      {/* Hamburger - mobile only */}
       <button
-        className="md:hidden bg-transparent border-none text-2xl cursor-pointer"
+        className="lg:hidden bg-transparent border-none text-2xl cursor-pointer"
         style={{ color: "inherit" }}
         onClick={() => setMenuOpen(!menuOpen)}
       >
         {menuOpen ? "✕" : "☰"}
       </button>
 
-      {/* Desktop links */}
-      <ul className="hidden md:flex list-none gap-10 items-center m-0 p-0">
-        {/* Home link */}
+      {/* Desktop links - lg and above */}
+      <ul className="hidden lg:flex list-none gap-8 items-center m-0 p-0">
         <li>
           <Link
             to="/"
-            className="text-xs font-medium uppercase tracking-widest hover:opacity-50 transition-opacity"
-            style={{ color: "inherit", fontFamily: "Poppins, sans-serif" }}
+            className="text-sm uppercase inline-block border-b border-transparent pb-[3px] hover:border-current transition-all"
+            style={{ color: "inherit", fontFamily: "Space Mono, monospace" }}
           >
             Home
           </Link>
         </li>
-
-        {/* Dynamic nav items */}
         {navItems.map((item) => (
           <li key={item._key}>
             <Link
               to={getPath(item.pageSlug)}
-              className={`text-xs font-medium uppercase tracking-widest transition-opacity
-                ${
-                  item.pageSlug === "contact"
-                    ? "border-b border-current pb-0.5 hover:opacity-50"
-                    : "hover:opacity-50"
-                }`}
-              style={{ color: "inherit", fontFamily: "Poppins, sans-serif" }}
+              className="text-sm uppercase inline-block border-b border-transparent pb-[3px] hover:border-current transition-all"
+              style={{ color: "inherit", fontFamily: "Space Mono, monospace" }}
             >
               {getLabel(item)}
             </Link>
@@ -110,30 +102,27 @@ export default function Navbar() {
       {/* Mobile fullscreen menu */}
       {menuOpen && (
         <div className="fixed inset-0 bg-white text-gray-900 flex flex-col gap-8 px-12 pt-24 z-40">
-          {/* Close button */}
           <button
             className="absolute top-6 right-8 text-2xl text-gray-900"
             onClick={() => setMenuOpen(false)}
           >
             ✕
           </button>
-
           <Link
             to="/"
             onClick={() => setMenuOpen(false)}
-            className="text-base font-medium uppercase tracking-widest text-gray-900 hover:opacity-50 transition-opacity"
-            style={{ fontFamily: "Poppins, sans-serif" }}
+            className="text-sm uppercase inline-block border-b border-transparent pb-[3px] text-gray-900"
+            style={{ fontFamily: "Space Mono, monospace" }}
           >
             Home
           </Link>
-
           {navItems.map((item) => (
             <Link
               key={item._key}
               to={getPath(item.pageSlug)}
               onClick={() => setMenuOpen(false)}
-              className="text-base font-medium uppercase tracking-widest text-gray-900 hover:opacity-50 transition-opacity"
-              style={{ fontFamily: "Poppins, sans-serif" }}
+              className="text-sm uppercase inline-block border-b border-transparent pb-[3px] text-gray-900"
+              style={{ fontFamily: "Space Mono, monospace" }}
             >
               {getLabel(item)}
             </Link>

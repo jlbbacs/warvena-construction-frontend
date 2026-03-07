@@ -64,7 +64,7 @@ export default function Home() {
           _id, title, slug, location, type,
           "image": image.asset->url,
           "category": project_categories[0]->title
-        }`
+        }`,
       )
       .then((data) => {
         if (data) setProjects(data);
@@ -92,16 +92,23 @@ export default function Home() {
           frameBorder="0"
         />
         <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
 
         {/* Hero text - vertically centered, left aligned */}
-        <div className="absolute inset-0 z-10 flex flex-col justify-center"
-          style={{ paddingLeft: 'clamp(2rem, 8vw, 8rem)' }}>
+        <div
+          className="absolute inset-0 z-10 flex flex-col justify-center"
+          style={{ paddingLeft: "clamp(2rem, 8vw, 8rem)" }}
+        >
           <div className="max-w-lg">
             <h1
-  className="text-white font-black leading-tight mb-6"
-  style={{ fontSize: 'clamp(2rem, 3.5vw, 3.2rem)' }}>
-  Exciting buildings that stand the test of time
-</h1>
+              className="font-semibold leading-none m-0 text-white"
+              style={{
+                fontFamily: "Poppins, sans-serif",
+                fontSize: "clamp(2.25rem, 5vw, 3.75rem)",
+              }}
+            >
+              Exciting buildings that stand the test of time
+            </h1>
             <p className="text-white/70 text-xs uppercase tracking-[0.3em]">
               Your success is our success
             </p>
@@ -120,25 +127,46 @@ export default function Home() {
 
         {/* Scroll arrow - bottom center */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            strokeWidth="1.5"
+          >
             <path d="M12 5v14M5 12l7 7 7-7" />
           </svg>
         </div>
       </div>
 
       {/* Unique story */}
-      <div style={{ paddingLeft: 'clamp(2rem, 8vw, 8rem)', paddingRight: 'clamp(2rem, 8vw, 8rem)' }}
-        className="py-24 ml-auto max-w-3xl">
+      <div
+        style={{
+          paddingLeft: "clamp(2rem, 8vw, 8rem)",
+          paddingRight: "clamp(2rem, 8vw, 8rem)",
+        }}
+        className="py-24 ml-auto max-w-3xl"
+      >
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 leading-snug text-right">
-          Each home has a unique story and each project requires an individual approach. Yours does too.
+          Each home has a unique story and each project requires an individual
+          approach. Yours does too.
         </h2>
       </div>
 
       {/* Featured project */}
-      <div style={{ paddingLeft: 'clamp(2rem, 8vw, 8rem)', paddingRight: 'clamp(2rem, 8vw, 8rem)' }}
-        className="pb-24">
+      <div
+        style={{
+          paddingLeft: "clamp(2rem, 8vw, 8rem)",
+          paddingRight: "clamp(2rem, 8vw, 8rem)",
+        }}
+        className="pb-24"
+      >
         {projects[0] && (
-          <Link to={`/projects/${projects[0].slug.current}`} className="group block">
+          <Link
+            to={`/projects/${projects[0].slug.current}`}
+            className="group block"
+          >
             <div className="overflow-hidden">
               <img
                 src={projects[0].image}
@@ -161,21 +189,32 @@ export default function Home() {
       </div>
 
       {/* About teaser */}
-      <div style={{ paddingLeft: 'clamp(2rem, 8vw, 8rem)', paddingRight: 'clamp(2rem, 8vw, 8rem)' }}
-        className="py-24">
+      <div
+        style={{
+          paddingLeft: "clamp(2rem, 8vw, 8rem)",
+          paddingRight: "clamp(2rem, 8vw, 8rem)",
+        }}
+        className="py-24"
+      >
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 max-w-xl leading-snug mb-8">
           Our focus is on fostering strong, long-lasting relationships.
         </h2>
         <Link
           to="/about"
-          className="inline-block border border-gray-900 text-gray-900 px-8 py-3 text-xs font-medium uppercase tracking-widest hover:bg-gray-900 hover:text-white transition">
+          className="inline-block border border-gray-900 text-gray-900 px-8 py-3 text-xs font-medium uppercase tracking-widest hover:bg-gray-900 hover:text-white transition"
+        >
           About Warvena
         </Link>
       </div>
 
       {/* What makes us unique - tabs */}
-      <div style={{ paddingLeft: 'clamp(2rem, 8vw, 8rem)', paddingRight: 'clamp(2rem, 8vw, 8rem)' }}
-        className="py-24 border-t border-gray-100">
+      <div
+        style={{
+          paddingLeft: "clamp(2rem, 8vw, 8rem)",
+          paddingRight: "clamp(2rem, 8vw, 8rem)",
+        }}
+        className="py-24 border-t border-gray-100"
+      >
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-12">
           What makes us unique?
         </h2>
@@ -187,10 +226,12 @@ export default function Home() {
               key={tab.title}
               onClick={() => setActiveTab(i)}
               className={`px-4 py-2 text-xs font-medium uppercase tracking-widest transition border
-                ${activeTab === i
-                  ? "bg-gray-900 text-white border-gray-900"
-                  : "text-gray-500 border-gray-300 hover:border-gray-900 hover:text-gray-900"
-                }`}>
+                ${
+                  activeTab === i
+                    ? "bg-gray-900 text-white border-gray-900"
+                    : "text-gray-500 border-gray-300 hover:border-gray-900 hover:text-gray-900"
+                }`}
+            >
               {tab.title}
             </button>
           ))}
@@ -206,7 +247,9 @@ export default function Home() {
               {UNIQUE_TABS[activeTab].title}
             </h3>
             {UNIQUE_TABS[activeTab].text.map((para, i) => (
-              <p key={i} className="text-gray-600 leading-relaxed mb-4">{para}</p>
+              <p key={i} className="text-gray-600 leading-relaxed mb-4">
+                {para}
+              </p>
             ))}
           </div>
           <div />
@@ -214,19 +257,28 @@ export default function Home() {
       </div>
 
       {/* CTA banner */}
-      <div className="bg-gray-900 text-white py-20 text-center"
-        style={{ paddingLeft: 'clamp(2rem, 8vw, 8rem)', paddingRight: 'clamp(2rem, 8vw, 8rem)' }}>
+      <div
+        className="bg-gray-900 text-white py-20 text-center"
+        style={{
+          paddingLeft: "clamp(2rem, 8vw, 8rem)",
+          paddingRight: "clamp(2rem, 8vw, 8rem)",
+        }}
+      >
         <h2 className="text-3xl md:text-4xl font-bold mb-6">
           Ready to start your project?
         </h2>
         <Link
           to="/contact"
-          className="inline-block bg-white text-gray-900 px-10 py-4 font-semibold uppercase tracking-widest hover:bg-gray-100 transition">
+          className="inline-block bg-white text-gray-900 px-10 py-4 font-semibold uppercase tracking-widest hover:bg-gray-100 transition"
+        >
           Get in touch
         </Link>
         <p className="mt-6 text-gray-400 text-sm">
           or call us on{" "}
-          <a href="tel:01872300856" className="text-white font-semibold hover:underline">
+          <a
+            href="tel:01872300856"
+            className="text-white font-semibold hover:underline"
+          >
             01872 300856
           </a>
         </p>

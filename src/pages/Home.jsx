@@ -85,6 +85,7 @@ export default function Home() {
           }}
         />
 
+        {/* Vimeo iframe */}
         <iframe
           src="https://player.vimeo.com/video/1026164224?autoplay=1&muted=1&loop=1&background=1&controls=0&autopause=0&playsinline=1&quality=auto"
           style={{
@@ -109,9 +110,9 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/50" style={{ zIndex: 2 }} />
         <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/10 to-transparent" style={{ zIndex: 2 }} />
 
-        {/* Hero text - vertically centered */}
+        {/* Hero text */}
         <div
-          className="absolute inset-0 flex flex-col items-start justify-center"
+          className="absolute inset-0 flex flex-col items-start justify-start pt-50 md:justify-center md:pt-0"
           style={{
             paddingLeft: "clamp(2rem, 8vw, 8rem)",
             paddingRight: "clamp(2rem, 8vw, 8rem)",
@@ -130,7 +131,7 @@ export default function Home() {
               Exciting buildings that stand the test of time
             </h1>
             <p
-              className="text-white/70 text-xs uppercase"
+              className="text-white text-xs uppercase"
               style={{
                 letterSpacing: "0.3em",
                 fontFamily: "Space Mono, monospace",
@@ -141,41 +142,47 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Coordinates - bottom left on mobile, bottom right on desktop */}
+        {/* Bottom bar - coordinates left, arrow right */}
         <div
-          className="absolute bottom-16 left-8 md:left-auto md:right-16 z-10 text-left md:text-right"
-          style={{ zIndex: 3 }}
+       
+  className="absolute bottom-8 left-0 right-0 flex items-end justify-between md:justify-end md:gap-16"
+          style={{
+            paddingLeft: "clamp(2rem, 8vw, 8rem)",
+            paddingRight: "clamp(2rem, 8vw, 8rem)",
+            zIndex: 3,
+          }}
         >
-          <p
-            className="text-white/70 text-xs uppercase tracking-widest mb-1"
-            style={{ fontFamily: "Space Mono, monospace" }}
-          >
-            Gwithian Bay
-          </p>
-          <p
-            className="text-white/60 text-xs tracking-widest"
-            style={{ fontFamily: "Space Mono, monospace" }}
-          >
-            50°13'20.5"N 6°36'57.8"W
-          </p>
+          {/* Coordinates - bottom left */}
+         <div className="text-left">
+            <p
+              className="text-white text-xs uppercase tracking-widest mb-1"
+              style={{ fontFamily: "Space Mono, monospace" }}
+            >
+              Gwithian Bay
+            </p>
+            <p
+              className="text-white text-xs tracking-widest"
+              style={{ fontFamily: "Space Mono, monospace", opacity: 0.7 }}
+            >
+              50°13'20.5"N 6°36'57.8"W
+            </p>
+          </div>
+
+          {/* Scroll arrow - bottom right */}
+          <div className="animate-bounce">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              strokeWidth="1.5"
+            >
+              <path d="M12 5v14M5 12l7 7 7-7" />
+            </svg>
+          </div>
         </div>
 
-        {/* Scroll arrow - bottom right on mobile, bottom center on desktop */}
-        <div
-          className="absolute bottom-8 right-8 md:right-auto md:left-1/2 md:-translate-x-1/2 z-10 animate-bounce"
-          style={{ zIndex: 3 }}
-        >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="white"
-            strokeWidth="1.5"
-          >
-            <path d="M12 5v14M5 12l7 7 7-7" />
-          </svg>
-        </div>
       </div>
 
       {/* Unique story */}
@@ -264,10 +271,9 @@ export default function Home() {
               key={tab.title}
               onClick={() => setActiveTab(i)}
               className={`px-4 py-2 text-xs font-medium uppercase tracking-widest transition border
-                ${
-                  activeTab === i
-                    ? "bg-gray-900 text-white border-gray-900"
-                    : "text-gray-500 border-gray-300 hover:border-gray-900 hover:text-gray-900"
+                ${activeTab === i
+                  ? "bg-gray-900 text-white border-gray-900"
+                  : "text-gray-500 border-gray-300 hover:border-gray-900 hover:text-gray-900"
                 }`}
             >
               {tab.title}
@@ -313,10 +319,10 @@ export default function Home() {
         </Link>
         <p className="mt-6 text-gray-400 text-sm">
           or call us on{" "}
-          <a
+          
             href="tel:01872300856"
             className="text-white font-semibold hover:underline"
-          >
+          <a>
             01872 300856
           </a>
         </p>

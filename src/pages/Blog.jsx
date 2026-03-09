@@ -2,20 +2,32 @@ import { useEffect, useState } from 'react'
 import { client } from '../../sanityclient'
 import { Link } from 'react-router-dom'
 
-const CATEGORIES = ['All Articles', 'Renovations', 'Extensions', 'Design', 'Sustainability', 'Passive Homes']
-
 export default function Blog() {
   const [posts, setPosts] = useState([])
   const [filtered, setFiltered] = useState([])
+  const [categories, setCategories] = useState([])
   const [activeCategory, setActiveCategory] = useState('All Articles')
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
 
+  // Fetch categories from Sanity
+  useEffect(() => {
+    client.fetch(`
+      *[_type == "blog_category"] | order(title asc) {
+        _id, title, slug
+      }
+    `).then(data => {
+      setCategories(data || [])
+    })
+  }, [])
+
+  // Fetch posts from Sanity
   useEffect(() => {
     client.fetch(`
       *[_type == "blog_post"] | order(publishedAt desc) {
-        _id, title, slug, category, excerpt, publishedAt,
-        "image": image.asset->url
+        _id, title, slug, excerpt, publishedAt,
+        "image": image.asset->url,
+        "category": category->title
       }
     `).then(data => {
       setPosts(data || [])
@@ -67,23 +79,37 @@ export default function Blog() {
         {/* Category tabs - scrollable on mobile */}
         <div className="overflow-x-auto pb-2 mb-4">
           <div className="flex gap-6 min-w-max">
-            {CATEGORIES.map(cat => (
+
+            {/* All Articles tab */}
+            <button
+              onClick={() => setActiveCategory('All Articles')}
+              className={`text-sm pb-1 whitespace-nowrap transition-all
+                ${activeCategory === 'All Articles'
+                  ? 'text-gray-900 font-semibold border-b-2 border-gray-900'
+                  : 'text-gray-400 hover:text-gray-700'
+                }`}
+            >
+              All Articles
+            </button>
+
+            {/* Dynamic categories from Sanity */}
+            {categories.map(cat => (
               <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
+                key={cat._id}
+                onClick={() => setActiveCategory(cat.title)}
                 className={`text-sm pb-1 whitespace-nowrap transition-all
-                  ${activeCategory === cat
+                  ${activeCategory === cat.title
                     ? 'text-gray-900 font-semibold border-b-2 border-gray-900'
                     : 'text-gray-400 hover:text-gray-700'
                   }`}
               >
-                {cat}
+                {cat.title}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Search - full width on mobile */}
+        {/* Search */}
         <div className="flex items-center border border-gray-200 bg-white px-4 py-2 gap-2 w-full md:w-64">
           <input
             type="text"
@@ -92,15 +118,7 @@ export default function Blog() {
             onChange={e => setSearch(e.target.value)}
             className="text-sm outline-none bg-transparent text-gray-700 w-full"
           />
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            className="text-gray-400 shrink-0"
-          >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-400 shrink-0">
             <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
           </svg>
         </div>
@@ -179,7 +197,8 @@ export default function Blog() {
       </div>
 
       {/* CTA */}
-      <div className="bg-white py-20 text-center border-t border-gray-100"
+      <div
+        className="bg-white py-20 text-center border-t border-gray-100"
         style={{ paddingLeft: 'clamp(2rem, 8vw, 8rem)', paddingRight: 'clamp(2rem, 8vw, 8rem)' }}
       >
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
@@ -190,7 +209,7 @@ export default function Blog() {
         </p>
         <Link
           to="/contact"
-         className="inline-block bg-gray-900 text-white px-10 py-4 text-sm font-medium uppercase tracking-widest hover:bg-gray-700 transition"
+          className="inline-block bg-gray-900 text-white px-10 py-4 text-sm font-medium uppercase tracking-widest hover:bg-gray-700 transition"
         >
           Get in Touch
         </Link>

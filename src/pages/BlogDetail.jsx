@@ -10,10 +10,11 @@ export default function BlogDetail() {
   useEffect(() => {
     client.fetch(`
       *[_type == "blog_post" && slug.current == $slug][0]{
-        _id, title, category, excerpt, publishedAt, author,
-        "image": image.asset->url,
-        body
-      }
+  _id, title, excerpt, publishedAt, author,
+  "category": category->title,
+  "image": image.asset->url,
+  body
+}
     `, { slug }).then(setPost)
   }, [slug])
 

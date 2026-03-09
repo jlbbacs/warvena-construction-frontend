@@ -49,53 +49,68 @@ export default function Blog() {
     <div className="min-h-screen bg-gray-50">
 
       {/* Header */}
-      <div className="pt-40 pb-12 text-center"
-        style={{ paddingLeft: 'clamp(2rem, 8vw, 8rem)', paddingRight: 'clamp(2rem, 8vw, 8rem)' }}>
-        <h1 className="text-5xl font-bold text-gray-900 mb-4">Blogs</h1>
+      <div
+        className="pt-40 pb-12 text-center"
+        style={{ paddingLeft: 'clamp(2rem, 8vw, 8rem)', paddingRight: 'clamp(2rem, 8vw, 8rem)' }}
+      >
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Blogs</h1>
         <p className="text-gray-500 text-sm tracking-wide">
           Insights &amp; updates from the world of luxury construction
         </p>
       </div>
 
       {/* Filters + Search */}
-      <div style={{ paddingLeft: 'clamp(2rem, 8vw, 8rem)', paddingRight: 'clamp(2rem, 8vw, 8rem)' }}
-        className="flex flex-wrap justify-between items-center gap-4 mb-10 border-b border-gray-200 pb-6">
-
-        {/* Category tabs */}
-        <div className="flex flex-wrap gap-6">
-          {CATEGORIES.map(cat => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`text-sm pb-1 transition-all
-                ${activeCategory === cat
-                  ? 'text-gray-900 font-semibold border-b-2 border-gray-900'
-                  : 'text-gray-400 hover:text-gray-700'
-                }`}>
-              {cat}
-            </button>
-          ))}
+      <div
+        style={{ paddingLeft: 'clamp(2rem, 8vw, 8rem)', paddingRight: 'clamp(2rem, 8vw, 8rem)' }}
+        className="mb-10 border-b border-gray-200 pb-6"
+      >
+        {/* Category tabs - scrollable on mobile */}
+        <div className="overflow-x-auto pb-2 mb-4">
+          <div className="flex gap-6 min-w-max">
+            {CATEGORIES.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`text-sm pb-1 whitespace-nowrap transition-all
+                  ${activeCategory === cat
+                    ? 'text-gray-900 font-semibold border-b-2 border-gray-900'
+                    : 'text-gray-400 hover:text-gray-700'
+                  }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Search */}
-        <div className="flex items-center border border-gray-200 bg-white px-4 py-2 gap-2">
+        {/* Search - full width on mobile */}
+        <div className="flex items-center border border-gray-200 bg-white px-4 py-2 gap-2 w-full md:w-64">
           <input
             type="text"
             placeholder="Search posts..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="text-sm outline-none bg-transparent text-gray-700 w-48"
+            className="text-sm outline-none bg-transparent text-gray-700 w-full"
           />
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-400">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            className="text-gray-400 shrink-0"
+          >
             <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
           </svg>
         </div>
       </div>
 
       {/* Posts grid */}
-      <div style={{ paddingLeft: 'clamp(2rem, 8vw, 8rem)', paddingRight: 'clamp(2rem, 8vw, 8rem)' }}
-        className="pb-24">
-
+      <div
+        style={{ paddingLeft: 'clamp(2rem, 8vw, 8rem)', paddingRight: 'clamp(2rem, 8vw, 8rem)' }}
+        className="pb-24"
+      >
         {loading && (
           <p className="text-gray-400 text-sm uppercase tracking-widest text-center py-20">
             Loading...
@@ -108,7 +123,7 @@ export default function Blog() {
           </p>
         )}
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filtered.map(post => (
             <div key={post._id} className="bg-white flex flex-col">
 
@@ -149,7 +164,8 @@ export default function Blog() {
                 )}
                 <Link
                   to={`/blogs/${post.slug.current}`}
-                  className="flex items-center gap-2 text-sm font-medium text-amber-600 hover:gap-3 transition-all mt-auto">
+                  className="flex items-center gap-2 text-sm font-medium text-amber-600 hover:gap-3 transition-all mt-auto"
+                >
                   Read More
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -163,8 +179,10 @@ export default function Blog() {
       </div>
 
       {/* CTA */}
-      <div className="bg-white py-20 text-center border-t border-gray-100">
-        <h2 className="text-3xl font-bold text-gray-900 mb-3">
+      <div className="bg-white py-20 text-center border-t border-gray-100"
+        style={{ paddingLeft: 'clamp(2rem, 8vw, 8rem)', paddingRight: 'clamp(2rem, 8vw, 8rem)' }}
+      >
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
           Ready to Transform Your Home?
         </h2>
         <p className="text-gray-500 text-sm mb-8">
@@ -172,7 +190,8 @@ export default function Blog() {
         </p>
         <Link
           to="/contact"
-          className="inline-block bg-amber-600 text-white px-10 py-4 text-sm font-medium hover:bg-amber-700 transition">
+          className="inline-block bg-amber-600 text-white px-10 py-4 text-sm font-medium hover:bg-amber-700 transition"
+        >
           Get in Touch
         </Link>
       </div>

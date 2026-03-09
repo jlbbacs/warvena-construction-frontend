@@ -74,9 +74,19 @@ export default function Home() {
   return (
     <div>
       {/* Hero - Vimeo video background */}
-      <div className="relative h-screen w-full overflow-hidden">
+      <div className="relative h-screen w-full overflow-hidden bg-gray-900">
+
+        {/* Poster image shown while video loads */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url('https://vumbnail.com/1026164224.jpg')`,
+            zIndex: 0,
+          }}
+        />
+
         <iframe
-          src="https://player.vimeo.com/video/1026164224?autoplay=1&muted=1&loop=1&background=1&controls=0"
+          src="https://player.vimeo.com/video/1026164224?autoplay=1&muted=1&loop=1&background=1&controls=0&autopause=0&playsinline=1&quality=auto"
           style={{
             position: "absolute",
             top: "50%",
@@ -87,46 +97,74 @@ export default function Home() {
             minHeight: "100vh",
             minWidth: "177.78vh",
             border: "none",
+            pointerEvents: "none",
+            zIndex: 1,
           }}
-          allow="autoplay; fullscreen"
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowFullScreen
           frameBorder="0"
         />
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
 
-        {/* Hero text - vertically centered, left aligned */}
+        {/* Overlays */}
+        <div className="absolute inset-0 bg-black/50" style={{ zIndex: 2 }} />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/10 to-transparent" style={{ zIndex: 2 }} />
+
+        {/* Hero text - vertically centered */}
         <div
-          className="absolute inset-0 z-10 flex flex-col justify-center"
-          style={{ paddingLeft: "clamp(2rem, 8vw, 8rem)" }}
+          className="absolute inset-0 flex flex-col items-start justify-center"
+          style={{
+            paddingLeft: "clamp(2rem, 8vw, 8rem)",
+            paddingRight: "clamp(2rem, 8vw, 8rem)",
+            zIndex: 3,
+          }}
         >
-          <div className="max-w-lg">
+          <div className="w-full max-w-lg">
             <h1
-              className="font-semibold leading-none m-0 text-white"
+              className="font-semibold leading-none text-white"
               style={{
                 fontFamily: "Poppins, sans-serif",
                 fontSize: "clamp(2.25rem, 5vw, 3.75rem)",
+                marginBottom: "2rem",
               }}
             >
               Exciting buildings that stand the test of time
             </h1>
-            <p className="text-white/70 text-xs uppercase tracking-[0.3em]">
+            <p
+              className="text-white/70 text-xs uppercase"
+              style={{
+                letterSpacing: "0.3em",
+                fontFamily: "Space Mono, monospace",
+              }}
+            >
               Your success is our success
             </p>
           </div>
         </div>
 
-        {/* Coordinates - bottom right */}
-        <div className="absolute bottom-16 right-16 z-10 text-right hidden md:block">
-          <p className="text-white/70 text-xs uppercase tracking-widest mb-1">
+        {/* Coordinates - bottom left on mobile, bottom right on desktop */}
+        <div
+          className="absolute bottom-16 left-8 md:left-auto md:right-16 z-10 text-left md:text-right"
+          style={{ zIndex: 3 }}
+        >
+          <p
+            className="text-white/70 text-xs uppercase tracking-widest mb-1"
+            style={{ fontFamily: "Space Mono, monospace" }}
+          >
             Gwithian Bay
           </p>
-          <p className="text-white/60 text-xs tracking-widest">
-            50°13&apos;20.5&quot;N 6°36&apos;57.8&quot;W
+          <p
+            className="text-white/60 text-xs tracking-widest"
+            style={{ fontFamily: "Space Mono, monospace" }}
+          >
+            50°13'20.5"N 6°36'57.8"W
           </p>
         </div>
 
-        {/* Scroll arrow - bottom center */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+        {/* Scroll arrow - bottom right on mobile, bottom center on desktop */}
+        <div
+          className="absolute bottom-8 right-8 md:right-auto md:left-1/2 md:-translate-x-1/2 z-10 animate-bounce"
+          style={{ zIndex: 3 }}
+        >
           <svg
             width="24"
             height="24"

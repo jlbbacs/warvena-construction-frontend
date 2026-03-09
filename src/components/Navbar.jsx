@@ -68,11 +68,21 @@ export default function Navbar() {
 
       {/* Hamburger - mobile only */}
       <button
-        className="lg:hidden bg-transparent border-none text-2xl cursor-pointer"
+        className="lg:hidden bg-transparent border-none cursor-pointer flex flex-col gap-[5px] p-1"
         style={{ color: "inherit" }}
         onClick={() => setMenuOpen(!menuOpen)}
       >
-        {menuOpen ? "✕" : "☰"}
+        {menuOpen ? (
+          <span className="text-2xl leading-none" style={{ color: "inherit" }}>
+            ✕
+          </span>
+        ) : (
+          <>
+            <span className="block w-6 h-[2px] bg-current" />
+            <span className="block w-6 h-[2px] bg-current" />
+            <span className="block w-6 h-[2px] bg-current" />
+          </>
+        )}
       </button>
 
       {/* Desktop links - lg and above */}

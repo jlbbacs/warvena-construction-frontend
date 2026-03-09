@@ -25,6 +25,8 @@ export default function Navbar() {
           navigation_items[]{
             _key,
             page_label,
+            external_link,
+            external_link_label,
             "pageTitle": page->title,
             "pageSlug": page->slug.current
           }
@@ -39,6 +41,22 @@ export default function Navbar() {
   const iconColor = isTransparent ? "white" : "#111111";
   const getLabel = (item) => item.page_label || item.pageTitle;
   const getPath = (slug) => (slug === "/" ? "/" : `/${slug}`);
+
+  // Converts full Vercel URL to relative path for React Router
+  const getHref = (item) => {
+    if (item.external_link) {
+      return item.external_link.replace(
+        'https://warvena-construction-frontend.vercel.app', ''
+      )
+    }
+    return getPath(item.pageSlug)
+  }
+
+  const getLinkLabel = (item) => {
+    return item.external_link_label || item.page_label || item.pageTitle
+  }
+
+  const linkClass = "text-sm uppercase inline-block border-b border-transparent pb-[3px] hover:border-current transition-all"
 
   return (
     <nav
@@ -68,24 +86,11 @@ export default function Navbar() {
         onClick={() => setMenuOpen(!menuOpen)}
       >
         {menuOpen ? (
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke={iconColor}
-            strokeWidth="1.5"
-          >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="1.5">
             <path d="M18 6L6 18M6 6l12 12" />
           </svg>
         ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="30"
-            height="24"
-            viewBox="0 0 30 24"
-            fill="none"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="24" viewBox="0 0 30 24" fill="none">
             <path
               d="M30 12C30 12.3315 29.8683 12.6495 29.6339 12.8839C29.3995 13.1183 29.0815 13.25 28.75 13.25H1.25C0.918479 13.25 0.600537 13.1183 0.366117 12.8839C0.131696 12.6495 0 12.3315 0 12C0 11.6685 0.131696 11.3505 0.366117 11.1161C0.600537 10.8817 0.918479 10.75 1.25 10.75H28.75C29.0815 10.75 29.3995 10.8817 29.6339 11.1161C29.8683 11.3505 30 11.6685 30 12ZM1.25 3.25H28.75C29.0815 3.25 29.3995 3.1183 29.6339 2.88388C29.8683 2.64946 30 2.33152 30 2C30 1.66848 29.8683 1.35054 29.6339 1.11612C29.3995 0.881696 29.0815 0.75 28.75 0.75H1.25C0.918479 0.75 0.600537 0.881696 0.366117 1.11612C0.131696 1.35054 0 1.66848 0 2C0 2.33152 0.131696 2.64946 0.366117 2.88388C0.600537 3.1183 0.918479 3.25 1.25 3.25ZM28.75 20.75H14.5833C14.2518 20.75 13.9339 20.8817 13.6995 21.1161C13.465 21.3505 13.3333 21.6685 13.3333 22C13.3333 22.3315 13.465 22.6495 13.6995 22.8839C13.9339 23.1183 14.2518 23.25 14.5833 23.25H28.75C29.0815 23.25 29.3995 23.1183 29.6339 22.8839C29.8683 22.6495 30 22.3315 30 22C30 21.6685 29.8683 21.3505 29.6339 21.1161C29.3995 20.8817 29.0815 20.75 28.75 20.75Z"
               fill={iconColor}
@@ -99,7 +104,7 @@ export default function Navbar() {
         <li>
           <Link
             to="/"
-            className="text-sm uppercase inline-block border-b border-transparent pb-[3px] hover:border-current transition-all"
+            className={linkClass}
             style={{ color: "inherit", fontFamily: "Space Mono, monospace" }}
           >
             Home
@@ -108,11 +113,11 @@ export default function Navbar() {
         {navItems.map((item) => (
           <li key={item._key}>
             <Link
-              to={getPath(item.pageSlug)}
-              className="text-sm uppercase inline-block border-b border-transparent pb-[3px] hover:border-current transition-all"
+              to={getHref(item)}
+              className={linkClass}
               style={{ color: "inherit", fontFamily: "Space Mono, monospace" }}
             >
-              {getLabel(item)}
+              {getLinkLabel(item)}
             </Link>
           </li>
         ))}
@@ -125,17 +130,11 @@ export default function Navbar() {
             className="absolute top-6 right-8"
             onClick={() => setMenuOpen(false)}
           >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#111111"
-              strokeWidth="1.5"
-            >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111111" strokeWidth="1.5">
               <path d="M18 6L6 18M6 6l12 12" />
             </svg>
           </button>
+
           <Link
             to="/"
             onClick={() => setMenuOpen(false)}
@@ -144,15 +143,16 @@ export default function Navbar() {
           >
             Home
           </Link>
+
           {navItems.map((item) => (
             <Link
               key={item._key}
-              to={getPath(item.pageSlug)}
+              to={getHref(item)}
               onClick={() => setMenuOpen(false)}
               className="text-sm uppercase inline-block border-b border-transparent pb-[3px] text-gray-900"
               style={{ fontFamily: "Space Mono, monospace" }}
             >
-              {getLabel(item)}
+              {getLinkLabel(item)}
             </Link>
           ))}
         </div>

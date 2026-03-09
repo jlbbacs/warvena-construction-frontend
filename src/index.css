@@ -19,3 +19,8 @@
     @apply overflow-x-hidden w-full m-0 p-0;
   }
 }
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}

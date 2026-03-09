@@ -2,6 +2,54 @@ import { useEffect, useState } from 'react'
 import { client } from '../../sanityclient'
 import { Link } from 'react-router-dom'
 
+function SkeletonCard() {
+  return (
+    <div className="bg-white flex flex-col border border-stone-100">
+      {/* Skeleton image */}
+      <div className="w-full h-52 bg-stone-200 relative overflow-hidden">
+        <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-stone-200 via-white to-stone-200" />
+      </div>
+      {/* Skeleton content */}
+      <div className="p-6 flex flex-col gap-3">
+        <div className="h-3 bg-stone-200 w-1/4 relative overflow-hidden rounded">
+          <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-stone-200 via-white to-stone-200" />
+        </div>
+        <div className="h-5 bg-stone-200 w-3/4 relative overflow-hidden rounded">
+          <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-stone-200 via-white to-stone-200" />
+        </div>
+        <div className="h-4 bg-stone-200 w-full relative overflow-hidden rounded">
+          <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-stone-200 via-white to-stone-200" />
+        </div>
+        <div className="h-4 bg-stone-200 w-2/3 relative overflow-hidden rounded">
+          <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-stone-200 via-white to-stone-200" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function LazyImage({ src, alt, className }) {
+  const [loaded, setLoaded] = useState(false)
+
+  return (
+    <div className="relative w-full h-52">
+      {/* Skeleton shown until image loads */}
+      {!loaded && (
+        <div className="absolute inset-0 bg-stone-200 overflow-hidden">
+          <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-stone-200 via-white to-stone-200" />
+        </div>
+      )}
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        onLoad={() => setLoaded(true)}
+        className={`${className} transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+      />
+    </div>
+  )
+}
+
 export default function Blog() {
   const [posts, setPosts] = useState([])
   const [filtered, setFiltered] = useState([])
@@ -58,12 +106,12 @@ export default function Blog() {
         className="bg-gray-900 pt-40 pb-16 text-left"
         style={{ paddingLeft: 'clamp(2rem, 8vw, 8rem)', paddingRight: 'clamp(2rem, 8vw, 8rem)' }}
       >
-        <p
+        {/* <p
           className="text-xs uppercase tracking-[0.4em] text-yellow-600 mb-4"
           style={{ fontFamily: 'Space Mono, monospace' }}
         >
           Warvena Journal
-        </p>
+        </p> */}
         <h1
           className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight"
           style={{ fontFamily: 'Poppins, sans-serif', letterSpacing: '-0.02em' }}
@@ -135,13 +183,13 @@ export default function Blog() {
         style={{ paddingLeft: 'clamp(2rem, 8vw, 8rem)', paddingRight: 'clamp(2rem, 8vw, 8rem)' }}
         className="pb-24"
       >
+        {/* Skeleton loading state */}
         {loading && (
-          <p
-            className="text-gray-400 text-xs uppercase tracking-widest text-center py-20"
-            style={{ fontFamily: 'Space Mono, monospace' }}
-          >
-            Loading...
-          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(6)].map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
+          </div>
         )}
 
         {!loading && filtered.length === 0 && (
@@ -153,74 +201,76 @@ export default function Blog() {
           </p>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filtered.map((post, i) => (
-            <div
-              key={post._id}
-              className="bg-white flex flex-col group border border-stone-100 hover:border-stone-200 hover:shadow-md transition-all duration-300"
-            >
-              {/* Image */}
-              <div className="overflow-hidden relative">
-                {post.image ? (
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                ) : (
-                  <div className="w-full h-52 bg-stone-100 flex items-center justify-center">
-                    <span className="text-gray-300 text-xs uppercase tracking-widest">No image</span>
-                  </div>
-                )}
-                {/* Category badge on image */}
-                {post.category && (
-                  <span
-                    className="absolute top-3 left-3 bg-gray-900 text-white text-xs uppercase tracking-widest px-3 py-1"
+        {!loading && filtered.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filtered.map((post) => (
+              <div
+                key={post._id}
+                className="bg-white flex flex-col group border border-stone-100 hover:border-stone-200 hover:shadow-md transition-all duration-300"
+              >
+                {/* Image with lazy load + skeleton */}
+                <div className="overflow-hidden relative">
+                  {post.image ? (
+                    <LazyImage
+                      src={post.image}
+                      alt={post.title}
+                      className="w-full h-52 object-cover group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="w-full h-52 bg-stone-100 flex items-center justify-center">
+                      <span className="text-gray-300 text-xs uppercase tracking-widest">No image</span>
+                    </div>
+                  )}
+                  {/* Category badge */}
+                  {post.category && (
+                    <span
+                      className="absolute top-3 left-3 bg-gray-900 text-white text-xs uppercase tracking-widest px-3 py-1 z-10"
+                      style={{ fontFamily: 'Space Mono, monospace' }}
+                    >
+                      {post.category}
+                    </span>
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="p-6 flex flex-col flex-1 border-t-2 border-transparent group-hover:border-yellow-600 transition-all duration-300">
+                  <h2
+                    className="text-lg font-bold text-gray-900 mb-3 leading-snug"
+                    style={{ fontFamily: 'Poppins, sans-serif', letterSpacing: '-0.01em' }}
+                  >
+                    {post.title}
+                  </h2>
+
+                  {post.publishedAt && (
+                    <p
+                      className="text-xs text-gray-400 mb-3"
+                      style={{ fontFamily: 'Space Mono, monospace' }}
+                    >
+                      {formatDate(post.publishedAt)}
+                    </p>
+                  )}
+
+                  {post.excerpt && (
+                    <p className="text-sm text-gray-500 leading-relaxed mb-4 flex-1">
+                      {post.excerpt}
+                    </p>
+                  )}
+
+                  <Link
+                    to={`/blogs/${post.slug.current}`}
+                    className="flex items-center gap-2 text-xs font-medium text-gray-900 uppercase tracking-widest hover:gap-4 transition-all mt-auto"
                     style={{ fontFamily: 'Space Mono, monospace' }}
                   >
-                    {post.category}
-                  </span>
-                )}
+                    Read More
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  </Link>
+                </div>
               </div>
-
-              {/* Content */}
-              <div className="p-6 flex flex-col flex-1 border-t-2 border-transparent group-hover:border-yellow-600 transition-all duration-300">
-                <h2
-                  className="text-lg font-bold text-gray-900 mb-3 leading-snug"
-                  style={{ fontFamily: 'Poppins, sans-serif', letterSpacing: '-0.01em' }}
-                >
-                  {post.title}
-                </h2>
-
-                {post.publishedAt && (
-                  <p
-                    className="text-xs text-gray-400 mb-3"
-                    style={{ fontFamily: 'Space Mono, monospace' }}
-                  >
-                    {formatDate(post.publishedAt)}
-                  </p>
-                )}
-
-                {post.excerpt && (
-                  <p className="text-sm text-gray-500 leading-relaxed mb-4 flex-1">
-                    {post.excerpt}
-                  </p>
-                )}
-
-                <Link
-                  to={`/blogs/${post.slug.current}`}
-                  className="flex items-center gap-2 text-xs font-medium text-gray-900 uppercase tracking-widest hover:gap-4 transition-all mt-auto"
-                  style={{ fontFamily: 'Space Mono, monospace' }}
-                >
-                  Read More
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* CTA */}

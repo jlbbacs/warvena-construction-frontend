@@ -164,7 +164,7 @@ export default function Blog() {
                 )}
                 <Link
                   to={`/blogs/${post.slug.current}`}
-                  className="flex items-center gap-2 text-sm font-medium text-amber-600 hover:gap-3 transition-all mt-auto"
+                  className="flex items-center gap-2 text-sm font-medium text-gray-900 hover:gap-3 transition-all mt-auto"
                 >
                   Read More
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -190,7 +190,7 @@ export default function Blog() {
         </p>
         <Link
           to="/contact"
-          className="inline-block bg-amber-600 text-white px-10 py-4 text-sm font-medium hover:bg-amber-700 transition"
+         className="inline-block bg-gray-900 text-white px-10 py-4 text-sm font-medium uppercase tracking-widest hover:bg-gray-700 transition"
         >
           Get in Touch
         </Link>

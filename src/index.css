@@ -13,3 +13,9 @@
     font-family: 'Poppins', sans-serif;
   }
 }
+
+@layer base {
+  html, body {
+    @apply overflow-x-hidden w-full m-0 p-0;
+  }
+}

@@ -74,7 +74,7 @@ export default function Home() {
   return (
     <div>
       {/* Hero - Vimeo video background */}
-      <div className="relative h-screen w-full overflow-hidden bg-gray-900">
+      <div className="relative w-full overflow-hidden bg-gray-900" style={{ height: '100svh' }}>
 
         {/* Poster image shown while video loads */}
         <div

@@ -165,12 +165,13 @@ export default function Services() {
                 : cat.subCategories.slice(0, displayLimit);
 
               return (
-                <div key={cat.id} className="flex flex-col">
-                  {/* Image Container - Grayscale Removed */}
-                  <div className="relative h-64 overflow-hidden mb-6 rounded-sm">
+                <div key={cat.id} className="flex flex-col animate-fadeIn">
+                  {/* Image Container with Lazy Loading */}
+                  <div className="relative h-64 overflow-hidden mb-6 rounded-sm bg-gray-100">
                     <img 
                       src={cat.image} 
                       alt={cat.category} 
+                      loading="lazy" // 👈 Native Browser Lazy Load
                       className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                     />
                   </div>

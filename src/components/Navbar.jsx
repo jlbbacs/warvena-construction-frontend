@@ -7,8 +7,20 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [navItems, setNavItems] = useState([]);
+  const [servicesOpen, setServicesOpen] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === "/";
+
+  const services = [
+    "Residential Construction & Renovations",
+    "Commercial Construction",
+    "Construction Specialist",
+    "House Extensions",
+    "Structural Repairs",
+    "Demolition",
+    "Costing & Estimating",
+    "Planning & Consultation"
+  ];
 
   useEffect(() => {
     setScrolled(false);
@@ -20,143 +32,146 @@ export default function Navbar() {
 
   useEffect(() => {
     client
-      .fetch(`
-        *[_type == "menu" && slug.current == "main-menu"][0]{
+      .fetch(`*[_type == "menu" && slug.current == "main-menu"][0]{
           navigation_items[]{
             _key,
             page_label,
             external_link,
-            external_link_label,
-            "pageTitle": page->title,
             "pageSlug": page->slug.current
           }
-        }
-      `)
+        }`)
       .then((data) => {
         if (data?.navigation_items) setNavItems(data.navigation_items);
       });
   }, []);
 
   const isTransparent = isHome && !scrolled;
-  const iconColor = isTransparent ? "white" : "#111111";
-  const getLabel = (item) => item.page_label || item.pageTitle;
-  const getPath = (slug) => (slug === "/" ? "/" : `/${slug}`);
+  const iconColor = isTransparent ? "#FFFFFF" : "#111111";
 
-  // Converts full Vercel URL to relative path for React Router
   const getHref = (item) => {
-    if (item.external_link) {
-      return item.external_link.replace(
-        'https://warvena-construction-frontend.vercel.app', ''
-      )
-    }
-    return getPath(item.pageSlug)
-  }
+    if (item.external_link) return item.external_link.replace('https://warvena-construction-frontend.vercel.app', '');
+    return item.pageSlug === "/" ? "/" : `/${item.pageSlug}`;
+  };
 
-  const getLinkLabel = (item) => {
-    return item.external_link_label || item.page_label || item.pageTitle
-  }
-
-  const linkClass = "text-sm uppercase inline-block border-b border-transparent pb-[3px] hover:border-current transition-all"
+  const navItemLi = "relative flex items-center h-full";
+  const linkClass = "text-[12px] tracking-[0.15em] uppercase flex items-center border-b border-transparent pb-[2px] hover:border-current transition-all cursor-pointer leading-none h-[20px]";
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center transition-all duration-300
-        ${isTransparent
-          ? "py-6 lg:py-12 bg-transparent text-white"
-          : "py-4 lg:py-6 bg-white text-gray-900 shadow-[0_1px_0_rgba(0,0,0,0.1)]"
-        }`}
-      style={{
-        paddingLeft: "clamp(2rem, 8vw, 8rem)",
-        paddingRight: "clamp(2rem, 8vw, 8rem)",
-      }}
+      className={`fixed top-0 left-0 right-0 z-[100] flex justify-between items-center transition-all duration-500
+        ${isTransparent ? "py-8 lg:py-12 bg-transparent text-white" : "py-4 lg:py-6 bg-white text-gray-900 shadow-sm"}`}
+      style={{ paddingLeft: "clamp(1.5rem, 6vw, 8rem)", paddingRight: "clamp(1.5rem, 6vw, 8rem)" }}
     >
-      {/* Logo */}
-      <Link to="/" className="flex items-center" style={{ color: "inherit" }}>
+      <Link to="/" className="flex items-center shrink-0 z-[110]">
         <img
           src={Logo}
-          alt="Warvena Construction"
-          className="h-9.5 w-auto"
+          alt="Warvena"
+          className="h-7 lg:h-8 w-auto transition-all"
           style={{ filter: isTransparent ? "none" : "invert(1)" }}
         />
       </Link>
 
-      {/* Hamburger - mobile only */}
-      <button
-        className="lg:hidden bg-transparent border-none cursor-pointer p-2"
-        onClick={() => setMenuOpen(!menuOpen)}
-      >
-        {menuOpen ? (
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="1.5">
-            <path d="M18 6L6 18M6 6l12 12" />
-          </svg>
-        ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="24" viewBox="0 0 30 24" fill="none">
-            <path
-              d="M30 12C30 12.3315 29.8683 12.6495 29.6339 12.8839C29.3995 13.1183 29.0815 13.25 28.75 13.25H1.25C0.918479 13.25 0.600537 13.1183 0.366117 12.8839C0.131696 12.6495 0 12.3315 0 12C0 11.6685 0.131696 11.3505 0.366117 11.1161C0.600537 10.8817 0.918479 10.75 1.25 10.75H28.75C29.0815 10.75 29.3995 10.8817 29.6339 11.1161C29.8683 11.3505 30 11.6685 30 12ZM1.25 3.25H28.75C29.0815 3.25 29.3995 3.1183 29.6339 2.88388C29.8683 2.64946 30 2.33152 30 2C30 1.66848 29.8683 1.35054 29.6339 1.11612C29.3995 0.881696 29.0815 0.75 28.75 0.75H1.25C0.918479 0.75 0.600537 0.881696 0.366117 1.11612C0.131696 1.35054 0 1.66848 0 2C0 2.33152 0.131696 2.64946 0.366117 2.88388C0.600537 3.1183 0.918479 3.25 1.25 3.25ZM28.75 20.75H14.5833C14.2518 20.75 13.9339 20.8817 13.6995 21.1161C13.465 21.3505 13.3333 21.6685 13.3333 22C13.3333 22.3315 13.465 22.6495 13.6995 22.8839C13.9339 23.1183 14.2518 23.25 14.5833 23.25H28.75C29.0815 23.25 29.3995 23.1183 29.6339 22.8839C29.8683 22.6495 30 22.3315 30 22C30 21.6685 29.8683 21.3505 29.6339 21.1161C29.3995 20.8817 29.0815 20.75 28.75 20.75Z"
-              fill={iconColor}
-            />
-          </svg>
-        )}
-      </button>
+      {/* Desktop Navigation */}
+      <ul className="hidden lg:flex list-none gap-10 items-center m-0 p-0 h-full">
+        <li className={navItemLi}><Link to="/" className={linkClass} style={{ fontFamily: "Space Mono, monospace" }}>Home</Link></li>
+        
+        {navItems.map((item) => {
+          const isServices = item.page_label?.toLowerCase() === "services";
+          return isServices ? (
+            <li key={item._key} className={`${navItemLi} group`}>
+              <Link to={getHref(item)} className={`${linkClass} gap-2 group-hover:opacity-60`} style={{ fontFamily: "Space Mono, monospace" }}>
+                {item.page_label}
+                <svg className="w-2.5 h-2.5 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" strokeWidth="3" /></svg>
+              </Link>
 
-      {/* Desktop links */}
-      <ul className="hidden lg:flex list-none gap-8 items-center m-0 p-0">
-        <li>
-          <Link
-            to="/"
-            className={linkClass}
-            style={{ color: "inherit", fontFamily: "Space Mono, monospace" }}
-          >
-            Home
-          </Link>
-        </li>
-        {navItems.map((item) => (
-          <li key={item._key}>
-            <Link
-              to={getHref(item)}
-              className={linkClass}
-              style={{ color: "inherit", fontFamily: "Space Mono, monospace" }}
-            >
-              {getLinkLabel(item)}
-            </Link>
-          </li>
-        ))}
+              {/* MEGA MENU: Changed to fixed and centered on screen */}
+              <div className="fixed top-[80px] lg:top-[100px] left-1/2 -translate-x-1/2 w-[90vw] max-w-[1100px] bg-white shadow-[0_40px_80px_rgba(0,0,0,0.15)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 p-16 border-t-4 border-black text-gray-900 translate-y-2 group-hover:translate-y-0">
+                <div className="grid grid-cols-12 gap-16">
+                  
+                  {/* Branding Column */}
+                  <div className="col-span-4 flex flex-col justify-between border-r border-gray-100 pr-12">
+                    <div>
+                      <h3 className="text-[10px] tracking-[0.5em] uppercase font-bold text-gray-400 mb-8" style={{ fontFamily: "Space Mono, monospace" }}>
+                        The Studio
+                      </h3>
+                      <p className="text-xl font-medium leading-snug text-black mb-6">
+                        Expertise in high-end construction and structural engineering.
+                      </p>
+                    </div>
+                    <Link to="/contact" className="text-[11px] uppercase tracking-widest font-bold border-b-2 border-black w-fit pb-1 hover:text-gray-500 hover:border-gray-500 transition-all">
+                      Get a Consultation
+                    </Link>
+                  </div>
+
+                  {/* Services List Column */}
+                  <div className="col-span-8">
+                    <h4 className="text-[10px] tracking-[0.4em] uppercase font-bold text-gray-400 mb-10" style={{ fontFamily: "Space Mono, monospace" }}>
+                      Our Core Services
+                    </h4>
+                    <ul className="grid grid-cols-2 gap-x-12 gap-y-6">
+                      {services.map((s) => (
+                        <li key={s}>
+                          <Link 
+                            to={`/services/${s.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}`} 
+                            className="group/item flex items-center justify-between text-[12px] tracking-widest uppercase text-gray-600 hover:text-black transition-all" 
+                            style={{ fontFamily: "Space Mono, monospace" }}
+                          >
+                            <span className="group-hover/item:translate-x-3 transition-transform duration-300">{s}</span>
+                            <span className="opacity-0 group-hover/item:opacity-100 transition-all -translate-x-4 group-hover/item:translate-x-0">→</span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li>
+          ) : (
+            <li key={item._key} className={navItemLi}>
+                <Link to={getHref(item)} className={linkClass} style={{ fontFamily: "Space Mono, monospace" }}>
+                    {item.page_label}
+                </Link>
+            </li>
+          );
+        })}
       </ul>
 
-      {/* Mobile fullscreen menu */}
-      {menuOpen && (
-        <div className="fixed inset-0 bg-white text-gray-900 flex flex-col gap-8 px-12 pt-24 z-40">
-          <button
-            className="absolute top-6 right-8"
-            onClick={() => setMenuOpen(false)}
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111111" strokeWidth="1.5">
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
-          </button>
+      {/* Mobile Toggle */}
+      <button 
+        className="lg:hidden flex flex-col justify-center items-end w-8 h-8 z-[110] relative bg-transparent border-none outline-none cursor-pointer"
+        onClick={() => setMenuOpen(!menuOpen)}
+      >
+        <span className={`h-[2px] transition-all duration-300 rounded-full ${menuOpen ? "w-8 rotate-45 translate-y-[2px] bg-black" : "w-8 mb-1.5 bg-current"}`} style={{ backgroundColor: !menuOpen ? iconColor : "" }}></span>
+        <span className={`h-[2px] transition-all duration-300 rounded-full ${menuOpen ? "w-0 opacity-0 bg-black" : "w-5 mb-1.5 bg-current"}`} style={{ backgroundColor: !menuOpen ? iconColor : "" }}></span>
+        <span className={`h-[2px] transition-all duration-300 rounded-full ${menuOpen ? "w-8 -rotate-45 -translate-y-[10px] bg-black" : "w-8 bg-current"}`} style={{ backgroundColor: !menuOpen ? iconColor : "" }}></span>
+      </button>
 
-          <Link
-            to="/"
-            onClick={() => setMenuOpen(false)}
-            className="text-sm uppercase inline-block border-b border-transparent pb-[3px] text-gray-900"
-            style={{ fontFamily: "Space Mono, monospace" }}
-          >
-            Home
-          </Link>
-
-          {navItems.map((item) => (
-            <Link
-              key={item._key}
-              to={getHref(item)}
-              onClick={() => setMenuOpen(false)}
-              className="text-sm uppercase inline-block border-b border-transparent pb-[3px] text-gray-900"
-              style={{ fontFamily: "Space Mono, monospace" }}
-            >
-              {getLinkLabel(item)}
-            </Link>
-          ))}
+      {/* Mobile Menu */}
+      <div className={`fixed inset-0 bg-white z-[100] transition-all duration-500 ease-in-out ${menuOpen ? "opacity-100 visible translate-x-0" : "opacity-0 invisible translate-x-full"}`}>
+        <div className="flex flex-col h-full px-8 pt-32 pb-12 overflow-y-auto">
+          <Link to="/" onClick={() => setMenuOpen(false)} className="text-4xl uppercase font-black mb-8">Home</Link>
+          {navItems.map((item) => {
+            const isServices = item.page_label?.toLowerCase() === "services";
+            return isServices ? (
+              <div key={item._key} className="flex flex-col gap-4 mb-8">
+                <div className="flex justify-between items-center" onClick={() => setServicesOpen(!servicesOpen)}>
+                  <span className="text-4xl uppercase font-black">{item.page_label}</span>
+                  <span className="text-2xl font-light">{servicesOpen ? "−" : "+"}</span>
+                </div>
+                {servicesOpen && (
+                  <div className="flex flex-col gap-4 pl-4 border-l-2 border-black mt-2">
+                    {services.map(s => (
+                      <Link key={s} to={`/services/${s.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}`} onClick={() => setMenuOpen(false)} className="text-xs uppercase tracking-[0.2em] text-gray-500 font-bold">{s}</Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link key={item._key} to={getHref(item)} onClick={() => setMenuOpen(false)} className="text-4xl uppercase font-black mb-8">{item.page_label}</Link>
+            );
+          })}
         </div>
-      )}
+      </div>
     </nav>
   );
 }

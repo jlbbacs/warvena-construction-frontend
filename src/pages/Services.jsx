@@ -137,8 +137,10 @@ export default function Services() {
 
   return (
     <div className="min-h-screen bg-white font-sans antialiased">
-      <header className="pt-32 pb-16 px-8 text-center border-b border-gray-100">
-        <h1 className="text-4xl md:text-6xl font-light tracking-tighter mb-8 text-gray-900">Our Services</h1>
+      <header className="pt-20 pb-10 md:pt-32 md:pb-16 px-6 md:px-8 text-center border-b border-gray-100">
+  <h1 className="text-3xl md:text-6xl font-light tracking-tighter mb-6 md:mb-8 text-gray-900">
+    Our Services
+  </h1>
         <div className="max-w-md mx-auto mb-8">
           <input 
             type="text"
